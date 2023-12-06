@@ -10,5 +10,10 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
+  daisyui: {
+    themes: "dark",
+    prefix: "d-", // prefix for daisyUI classnames (components, modifiers and responsive class names. Not colors)
+    themeRoot: ":root", // The element that receives theme color CSS variables
+  },
 } satisfies Config;
