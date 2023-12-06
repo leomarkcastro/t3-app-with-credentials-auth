@@ -6,6 +6,8 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 
 import { db } from "@/server/db";
 import { compareSync } from "bcrypt";
@@ -47,6 +49,17 @@ export const authOptions: NextAuthOptions = {
     maxAge: 7 * 24 * 60 * 60, // 30 Days
   },
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
+    }),
     CredentialsProvider({
       // The name to display on the sign in form (e.g. "Sign in with...")
       name: "Credentials",
@@ -95,6 +108,10 @@ export const authOptions: NextAuthOptions = {
 
         return userJWT;
       },
+    }),
+    GithubProvider({
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
     // ...add more providers here
   ],
